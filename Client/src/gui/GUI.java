@@ -3,12 +3,13 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-import actions.Events;
-import constants.Constants;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+
 import gui.menu.MenuBar;
+import main.Resources.Constants;
+import main.Events;
 
 public abstract class GUI {
 	public static Frame mainFrame;
@@ -49,27 +50,10 @@ public abstract class GUI {
 		
 		startPanel.add(innerStartPanel, BorderLayout.CENTER);
 		
-		mainFrame = new Frame(Constants.START, startPanel, Constants.STARTWIDTH, Constants.STARTHEIGHT);
-		mainFrame.addWindowListener(new WindowAdapter(){
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                actions.Events.exit();
-            }
-        });
-		mainFrame.finish();
+		mainFrame = new Frame(Constants.START, startPanel, Constants.STARTWIDTH, Constants.STARTHEIGHT, Events.exitOnClose());
 	}
 	
 	public static void createMainFrame(){
-		mainFrame = new Frame(Constants.TITLE, Constants.DEFWIDTH, Constants.DEFHEIGHT);
-		mainFrame.setJMenuBar(new MenuBar());
-		mainFrame.addWindowListener(new WindowAdapter(){
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                actions.Events.exit();
-            }
-        });
-		mainFrame.finish();
+		mainFrame = new Frame(Constants.TITLE, new Panel(), Constants.DEFWIDTH, Constants.DEFHEIGHT, Events.exitOnClose(), (JMenuBar) new MenuBar());
 	}
 }

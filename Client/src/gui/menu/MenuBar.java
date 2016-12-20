@@ -2,7 +2,7 @@ package gui.menu;
 
 import javax.swing.JMenuBar;
 
-import constants.Constants;
+import main.Resources.Constants;
 
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {

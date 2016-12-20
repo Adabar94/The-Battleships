@@ -4,8 +4,8 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
-import constants.Constants;
-import constants.Logic;
+import main.Resources.Constants;
+import main.Resources;
 
 @SuppressWarnings("serial")
 public class Panel extends JPanel {
@@ -29,7 +29,7 @@ public class Panel extends JPanel {
 		int actRatio = w/h;
 		int expRatio = Constants.DEFWIDTH/Constants.DEFHEIGHT;
 		
-		if(Logic.inBetween(w, Constants.MINWIDTH, Constants.MAXWIDTH) && Logic.inBetween(h, Constants.MINHEIGHT, Constants.MAXHEIGHT) && 
+		if(Resources.inBetween(w, Constants.MINWIDTH, Constants.MAXWIDTH) && Resources.inBetween(h, Constants.MINHEIGHT, Constants.MAXHEIGHT) && 
 				actRatio == expRatio){
 			setPreferredSize(new Dimension(w,h));
 			return;

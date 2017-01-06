@@ -52,6 +52,7 @@ public abstract class Resources {
 		public static final String CANNOT_CREATE_CONFIG = "Nepodaøilo se vytvoøit soubor s nastavením!";
 		public static final String CANNOT_WRITE_CONFIG = "Nepodaøilo se uložit soubor s nastavením!";
 		public static final String APP_ERROR = "Application error!";
+		public static final String PORT_NOT_NUM = "Port is not in number formate!";
 	}	
 	
 	public static boolean inBetween(int value ,int min, int max){

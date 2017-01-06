@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import main.Events;
+import core.Events;
 
 @SuppressWarnings("serial")
 public class Button extends JButton {

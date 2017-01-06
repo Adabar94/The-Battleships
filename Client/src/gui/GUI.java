@@ -7,9 +7,9 @@ import java.awt.GridLayout;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
+import core.Events;
+import core.Resources.Constants;
 import gui.menu.MenuBar;
-import main.Resources.Constants;
-import main.Events;
 
 public abstract class GUI {
 	public static Frame mainFrame;

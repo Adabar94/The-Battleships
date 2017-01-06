@@ -2,8 +2,8 @@ package gui.menu;
 
 import javax.swing.JMenu;
 
-import actions.Events;
-import constants.Constants;
+import main.Resources.Constants;
+import main.Events;
 
 @SuppressWarnings("serial")
 public class Menu extends JMenu{

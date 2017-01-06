@@ -1,4 +1,4 @@
-package main;
+package core;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import main.Resources.Constants;
-import main.Resources.Errors;
+import core.Resources.Constants;
+import core.Resources.Errors;
 import gui.*;
 
 public abstract class Events {
@@ -112,7 +112,7 @@ public abstract class Events {
             @Override
             public void windowClosing(WindowEvent e)
             {
-                main.Events.exit();
+                core.Events.exit();
             }
 		};
 	}

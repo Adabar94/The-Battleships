@@ -4,8 +4,8 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
-import main.Resources.Constants;
-import main.Resources;
+import core.Resources;
+import core.Resources.Constants;
 
 @SuppressWarnings("serial")
 public class Panel extends JPanel {

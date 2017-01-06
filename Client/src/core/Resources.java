@@ -48,9 +48,11 @@ public abstract class Resources {
 	public abstract class Errors {
 		public static final String NOT_SUPPORTED_YET = "Not supported yet";
 		public static final String FORBIDDEN_CHARACTER = "Nepovolené znaky";
-	}
-
-	
+		
+		public static final String CANNOT_CREATE_CONFIG = "Nepodaøilo se vytvoøit soubor s nastavením!";
+		public static final String CANNOT_WRITE_CONFIG = "Nepodaøilo se uložit soubor s nastavením!";
+		public static final String APP_ERROR = "Application error!";
+	}	
 	
 	public static boolean inBetween(int value ,int min, int max){
 		if(min <= value && value <= max){

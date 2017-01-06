@@ -5,6 +5,8 @@ import gui.*;
 public class Main {
 
 	public static void main(String[] argc) {
+		Config.config();
+		
 		Thread communication = new Thread("Communication") {
 			@Override
 			public void run() {

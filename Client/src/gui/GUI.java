@@ -17,7 +17,6 @@ public abstract class GUI {
 	public static void createNewGame(){
 		Panel startPanel = new Panel();
 		Panel innerStartPanel = new Panel();
-
 		
 		innerStartPanel.setPreferredSize(new Dimension(Constants.STARTWIDTH-Constants.STARTHGAP,Constants.STARTHEIGHT-Constants.STARTVGAP));
 		

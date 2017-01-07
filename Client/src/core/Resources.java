@@ -1,10 +1,22 @@
 package core;
 
+import java.util.concurrent.Semaphore;
+
+import connection.Reader;
+import connection.Connect;
+import connection.Writer;
+
 public abstract class Resources {
 	public static String action;
-	public static String[] res;
 	
+	public static boolean connected = false;
 	
+	public static Connect TCPClient;
+	public static Reader reader;
+	public static Writer writer;
+	
+	public static Semaphore messToSendSem = new Semaphore(0);
+	public static String messToSend;
 	
 	public abstract class Constants{
 		// Sizes of window

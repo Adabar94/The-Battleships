@@ -8,29 +8,24 @@ import java.net.Socket;
 import core.Resources;
 
 public class Reader extends Thread {
-	Socket s;
+	Boolean runReader = true;
 	BufferedReader reader;
 	
 	public Reader(Socket s){
-		this.s = s;
+		try {
+			reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		} catch (IOException e) {
+			System.err.println("Cannot initialize reader!");
+			Resources.isError = true;
+		}
 		start();
 	}
 	
 	@Override
 	public void run(){
-		try {
-			reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			while(!Resources.action.equals("exit")){
-				getMessage();
-			}
-			reader.close();
-			if(!s.isClosed()){
-				s.close();
-			}
-		} catch (IOException e) {
-			System.err.println("Cannot initialize reader!");
-			e.printStackTrace();
-		} 
+		while(true){
+			Coders.decode(getMessage());
+		}
 	}
 	
 	/**
@@ -42,6 +37,7 @@ public class Reader extends Thread {
 			return reader.readLine();
 		} catch (IOException e) {
 			System.err.println("Read error");
+			Resources.isError = true;
 			return null;
 		}
 	}

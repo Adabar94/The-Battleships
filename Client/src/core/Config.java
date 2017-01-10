@@ -13,7 +13,7 @@ public abstract class Config {
 	public static String nick = "player";
 	public static String lang = "english";
 	public static String serverIP = "0.0.0.0";
-	public static int serverPort = 0000;
+	public static int serverPort = 1234;
 
 	/**
 	 * Method config reads config file and save config into variables. If config

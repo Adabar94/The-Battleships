@@ -4,10 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import core.Config;
+import core.Info;
+import core.Main;
 import core.Resources.Constants;
 
 @SuppressWarnings("serial")
@@ -28,25 +27,28 @@ public class LogIn extends JDialog {
 	JTextField serverField = new JTextField(Config.serverIP);
 	JTextField portField = new JTextField(Integer.toString(Config.serverPort));
 
-	public LogIn() {
+	public LogIn(GameFrame frame) {
+		super(frame);
+		setLocationRelativeTo(frame);
 		setTitle(Constants.TITLE);
-		try {
-			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
-		} catch (IOException e) {
-			System.err.println("Icon not found!");
-		}
 		setSize(new Dimension(Constants.START_WIDTH, Constants.START_HEIGHT));
-		setLocationRelativeTo(null);
-		add(getContent());
+		setContentPane(getContent());
+		setModal(true);
+		setResizable(false);
 		addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				dispose();
-				System.exit(0);
+				Main.exit();
 		    }
 		});
-		setModal(true);
 		setVisible(true);
+	}
+	
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (!visible) {
+			((GameFrame) getParent()).dispose();
+		}
 	}
 
 	private JPanel getContent() {
@@ -77,11 +79,11 @@ public class LogIn extends JDialog {
 	 * @return cancel button
 	 */
 	private JButton getCancelButton() {
-		JButton button = new JButton(Constants.EXIT);
+		JButton button = new JButton("Ukonèit");
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				setVisible(false);
 				System.exit(0);
 			}
 		});
@@ -102,7 +104,7 @@ public class LogIn extends JDialog {
 					Config.nick = nick;
 					Config.serverIP = server;
 					Config.serverPort = port;
-					dispose();
+					setVisible(false);
 				}
 			}
 		});
@@ -117,7 +119,7 @@ public class LogIn extends JDialog {
 		// Validate nickname
 		nick = nicknameField.getText();
 		if(nick.isEmpty() || nick.length()>13){
-			InfoWindows.error(Constants.NICKNAME_INVALID);
+			Info.error(Constants.NICKNAME_INVALID);
 			return false;
 		}
 		// Validate serverIP
@@ -129,12 +131,12 @@ public class LogIn extends JDialog {
 					try{
 						Integer.parseInt(item);
 					} catch (NumberFormatException e){
-						InfoWindows.error(Constants.SERVER_IP_INVALID);
+						Info.error(Constants.SERVER_IP_INVALID);
 						return false;
 					}
 				}
 			} else {
-				InfoWindows.error(Constants.SERVER_IP_INVALID);
+				Info.error(Constants.SERVER_IP_INVALID);
 				return false;
 			}
 		}
@@ -144,11 +146,11 @@ public class LogIn extends JDialog {
 		try{
 			port = Integer.parseInt(portField.getText());
 		} catch (NumberFormatException e){
-			InfoWindows.error(Constants.PORT_INVALID);
+			Info.error(Constants.PORT_INVALID);
 			return false;
 		}
 		if(port < 0 || port > 9999){
-			InfoWindows.error(Constants.PORT_INVALID);
+			Info.error(Constants.PORT_INVALID);
 			return false;
 		}
 		

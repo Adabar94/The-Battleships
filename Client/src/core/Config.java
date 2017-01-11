@@ -7,11 +7,13 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
-import core.Resources.Errors;
-
+/**
+ * Configuration basics
+ * @author Adam Barák
+ *
+ */
 public abstract class Config {
 	public static String nick = "player";
-	public static String lang = "english";
 	public static String serverIP = "0.0.0.0";
 	public static int serverPort = 1234;
 
@@ -30,9 +32,6 @@ public abstract class Config {
 					case "nick":
 						nick = items[1];
 						break;
-					case "lang":
-						lang = items[1];
-						break;
 					case "serverIP":
 						serverIP = items[1];
 						break;
@@ -43,16 +42,14 @@ public abstract class Config {
 				}
 				scan.close();
 			} catch (FileNotFoundException e) {
-				System.err.println();
+				Info.error("Soubor s konfigurací není validní.");
 			}
 		} else {
 			try {
 				configFile.createNewFile();
 			} catch (IOException e) {
-				System.err.println(Errors.CANNOT_CREATE_CONFIG);
-				e.printStackTrace();
+				Info.error("Nelze vytvoøit soubor s konfigurací. Souèasná konfigurace nebude uložena.");
 			}
-			;
 		}
 	}
 
@@ -63,13 +60,11 @@ public abstract class Config {
 		try {
 			PrintWriter writer = new PrintWriter("Config.conf", "UTF-8");
 			writer.println("nick=" + nick);
-			writer.println("lang=" + lang);
 			writer.println("serverIP=" + serverIP);
 			writer.println("serverPort=" + serverPort);
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			System.err.println(Errors.CANNOT_WRITE_CONFIG);
-			e.printStackTrace();
+			Info.error("Nenalezen soubor s konfigurací. Nelze uložit konfiguraci.");
 		}
 	}
 

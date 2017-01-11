@@ -5,38 +5,39 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import core.Resources;
-
-public class Writer{
+/**
+ * Class for sending messages to server
+ * 
+ * @author Adam Barák
+ *
+ */
+public class Writer {
 	PrintWriter writer;
-	
+
 	/**
 	 * Create writer on socket s
+	 * 
 	 * @param s
 	 */
-	public Writer(Socket s){
+	public Writer(Socket s) {
 		try {
 			writer = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
 		} catch (IOException e) {
-			System.err.println("Cannot initialize writer!");
-			Resources.isError = true;
+			Coders.decode("ES");
 		}
 	}
-	
+
 	/**
 	 * Send message to server
-	 * @param msg - message
+	 * 
+	 * @param msg
+	 *            - message
 	 */
 	public void sendMessage(String msg) {
-		try {
-			writer.println(msg);
-			writer.flush();
-		} catch (Exception e) {
-			System.err.println("Write error");
-			Resources.isError = true;
-		}
+		writer.println(msg);
+		writer.flush();
 	}
-	
+
 	/**
 	 * End writer - close PrintWriter
 	 */

@@ -1,9 +1,9 @@
 package connection;
 
 import core.Config;
+import core.Info;
 import core.Main;
 import core.Resources;
-import gui.InfoWindows;
 
 public abstract class Coders {
 
@@ -24,9 +24,11 @@ public abstract class Coders {
 			break;
 		case 'E':
 			if (order.charAt(1) == 'S') {
-				InfoWindows.error("Server ukonèil komunikaci, hra je ukonèena.");
+				Info.error("Server ukonèil komunikaci, hra je ukonèena.");
+			} else if (order.charAt(1) == 'N'){
+				Info.error("Server není dostupný. Ukonèuji aplikaci.");
 			} else {
-				InfoWindows.info("Opponent opustil hru, zvítìzil jste.");
+				Info.info("Opponent opustil hru, zvítìzil jste.");
 			}
 			Main.exit();
 			break;
@@ -38,7 +40,7 @@ public abstract class Coders {
 
 	public static void gameIsReady(String message) {
 		Resources.isOurTurn = message.charAt(1) == 0;
-		Resources.gamePhase = 3;
+		Resources.gameIsReady.release();
 	}
 
 	public static void recvAttackResult(String message) {
@@ -46,7 +48,7 @@ public abstract class Coders {
 		Resources.enemy.shoot(message.charAt(1), message.charAt(2),
 				message.charAt(3) > 0 ? true : false, message.charAt(4) > 0 ? true : false);
 		if(message.charAt(4) == 2) {
-			InfoWindows.info("Zvítìzil jste!");
+			Info.info("Zvítìzil jste!");
 			Main.exit();
 		}
 	}

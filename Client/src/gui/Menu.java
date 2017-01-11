@@ -1,12 +1,20 @@
 package gui;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import core.Resources.Constants;
+import core.Info;
+import core.Main;
+
+/**
+ * Menu bar
+ * 
+ * @author Adam Barák
+ *
+ */
 
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar {
@@ -17,18 +25,43 @@ public class Menu extends JMenuBar {
 	}
 
 	private JMenu game() {
-		JMenu game = new JMenu(Constants.GAME);
-		game.add(new Item(Constants.START, null));
+		JMenu game = new JMenu("Hra");
+		game.add(new Item("Nová hra", new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Main.restart();
+				System.out.println("TO DO");
+			}
+		}));
 		game.addSeparator();
-		game.add(new Item(Constants.EXIT, null));
+		game.add(new Item("Konec", new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.exit();
+			}
+		}));
 		return game;
 	}
 
 	private JMenu help() {
-		JMenu help = new JMenu(Constants.HELP);
-		help.add(new Item(Constants.HOWPLAY, null));
-		help.add(new Item(Constants.RULES, null));
-		help.add(new Item(Constants.ABOUT, null));
+		JMenu help = new JMenu("Nápovìda");
+		help.add(new Item("Jak hrát", null));
+		help.add(new Item("Pravidla", new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Info.info("Hra se skládá ze dvou èástí: \n" + "1) Umisování vlastních lodí\n"
+						+ "2) Hledání a potápìní soupeøovıch lodí\n"
+						+ "		Hráèi se støídají a postupnì støílí do poziv na oponentovì hrací møíce dokud jeden z nich nepotopí veškeré oponentovy lodì.\n");
+
+			}
+		}));
+		help.add(new Item("O høe", new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Info.info(
+						"Hra byla vytvoøena studentem Západoèeké univezity v Plzni v rámci semestrální práce z pøedmìtu Úvod do poèítaèovích sítí.\n Autorem je Adam Barák");
+			}
+		}));
 		return help;
 	}
 

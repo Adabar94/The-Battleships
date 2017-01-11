@@ -5,39 +5,53 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import core.Resources;
+import core.Main;
 
+/**
+ * Reader of messages from server
+ * 
+ * @author Adam Barák
+ *
+ */
 public class Reader extends Thread {
 	Boolean runReader = true;
 	BufferedReader reader;
-	
-	public Reader(Socket s){
+
+	/**
+	 * Initialize reader and start thread
+	 * 
+	 * @param s
+	 */
+	public Reader(Socket s) {
 		try {
 			reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		} catch (IOException e) {
-			System.err.println("Cannot initialize reader!");
-			Resources.isError = true;
+			System.err.println("Nelze inicializovat reader!");
+			Main.exit();
 		}
 		start();
 	}
-	
+
+	/**
+	 * Thread is waiting for messages and send them to decoder
+	 */
 	@Override
-	public void run(){
-		while(true){
+	public void run() {
+		while (true) {
 			Coders.decode(getMessage());
 		}
 	}
-	
+
 	/**
 	 * Get message from server
+	 * 
 	 * @return message
 	 */
 	public String getMessage() {
 		try {
 			return reader.readLine();
 		} catch (IOException e) {
-			System.err.println("Read error");
-			Resources.isError = true;
+			Coders.decode("ES");
 			return null;
 		}
 	}

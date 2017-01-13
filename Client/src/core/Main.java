@@ -1,15 +1,13 @@
 package core;
 
-import java.awt.Window;
-import java.io.File;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
+import javax.swing.JDialog;
 
 import connection.Coders;
 import connection.Connection;
 import connection.Reader;
 import connection.Writer;
+import game.AllyGrid;
+import game.EnemyGrid;
 import gui.*;
 
 /**
@@ -27,22 +25,28 @@ public class Main {
 	public static void main(String[] args) {
 		Config.config();
 
-		new LogIn(new GameFrame());
-		new SetShips(new GameFrame());
+		new LoginPhase(new GameFrame());
+		
+		Resources.ally = new AllyGrid();
+		Resources.enemy = new EnemyGrid();
 		
 		connection = new Connection(Config.serverIP, Config.serverPort);
 		Resources.writer = new Writer(connection.getSocket());
 		Resources.reader = new Reader(connection.getSocket());
 		
+		new PreparationPhase(new GameFrame());
+		
 		Coders.sendLoginMessage();
 		
-		Info.info("Èekání na protihráèe");
+		JDialog wait = Info.waitingForSecondPlayer();
 		try {
 			Resources.gameIsReady.acquire();
 		} catch (InterruptedException e) {
 			System.err.println("Semafor narušen!");
 		}
-		new Play(new GameFrame());
+		
+		wait.dispose();
+		new WarPhase(new GameFrame());
 	}
 	
 	/**
@@ -71,22 +75,4 @@ public class Main {
 		Config.saveConfig();
 		System.exit(0);
 	}
-	
-	/*public static void restart()
-	{
-	  final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-	  final File currentJar = new File(MyClassInTheJar.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-
-	  if(!currentJar.getName().endsWith(".jar"))
-	    return;
-
-	  final ArrayList<String> command = new ArrayList<String>();
-	  command.add(javaBin);
-	  command.add("-jar");
-	  command.add(currentJar.getPath());
-
-	  final ProcessBuilder builder = new ProcessBuilder(command);
-	  builder.start();
-	  System.exit(0);
-	}*/
 }

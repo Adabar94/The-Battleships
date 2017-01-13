@@ -17,12 +17,47 @@ import core.Resources.Constants;
 public abstract class Info {
 	
 	/**
+	 * Waiting for second player
+	 */
+	public static JDialog waitingForSecondPlayer() {
+		final JDialog dialog = new JDialog();
+		dialog.setTitle(Constants.TITLE);
+		dialog.setContentPane(new JOptionPane("Èekání na druhého hráèe", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null));
+		
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				Info.doYouWannaExit();
+			}
+		});
+		try {
+			dialog.setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
+		} catch (IOException e) {
+			System.err.println("Icon not found!");
+		}
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+		return dialog;
+	}
+	
+	/**
+	 * Method for show confirmation exit window
+	 */
+	public static void doYouWannaExit() {
+		int reply =  JOptionPane.showConfirmDialog(null, "Opravdu chcete ukonèit hru?", Constants.TITLE, JOptionPane.YES_NO_OPTION);
+		if(reply == JOptionPane.YES_OPTION){
+			Main.exit();
+		}
+	}
+	
+	/**
 	 * Method for errors calls
 	 * @param text text of error
 	 */
 	public static void error(String text) {
-		JDialog dialog = new JOptionPane(text, JOptionPane.ERROR_MESSAGE).createDialog("Error");
-		create(dialog);
+		create(new JOptionPane(text, JOptionPane.ERROR_MESSAGE).createDialog("Error"));
 	}
 	
 	/**
@@ -30,8 +65,7 @@ public abstract class Info {
 	 * @param text of information
 	 */
 	public static void info(String text) {
-		JDialog dialog = new JOptionPane(text, JOptionPane.INFORMATION_MESSAGE).createDialog(Constants.TITLE);
-		create(dialog);
+		create(new JOptionPane(text, JOptionPane.INFORMATION_MESSAGE).createDialog(Constants.TITLE));
 	}
 
 	/**

@@ -4,6 +4,7 @@ import core.Config;
 import core.Info;
 import core.Main;
 import core.Resources;
+import gui.WarPhase;
 
 public abstract class Coders {
 
@@ -39,15 +40,15 @@ public abstract class Coders {
 	}
 
 	public static void gameIsReady(String message) {
-		Resources.isOurTurn = message.charAt(1) == 0;
-		Resources.gameIsReady.release();
+		Resources.isOurTurn = message.charAt(1) == '0';
+		Resources.gameIsReady.release(2);
 	}
 
 	public static void recvAttackResult(String message) {
 		message = message.toUpperCase();
 		Resources.enemy.shoot(message.charAt(1), message.charAt(2),
-				message.charAt(3) > 0 ? true : false, message.charAt(4) > 0 ? true : false);
-		if(message.charAt(4) == 2) {
+				message.charAt(3) != '0' ? true : false, message.charAt(3) != '0' && message.charAt(4) != '0' ? true : false);
+		if(message.charAt(4) == '2') {
 			Info.info("Zvítìzil jste!");
 			Main.exit();
 		}
@@ -55,8 +56,13 @@ public abstract class Coders {
 
 	public static void recvDefendPosition(String message) {
 		message = message.toUpperCase();
+		if(message.length() > 3 && message.charAt(3) == 'D'){
+			Info.info("Nepøítel potopil vaši poslední loï. Prohrál jste!");
+			Main.exit();
+		}
 		Resources.ally.shoot(message.charAt(1), message.charAt(2));
 		Resources.isOurTurn = true;
+		WarPhase.turnInfoPane.getTurnImg();
 	}
 
 	/*
@@ -71,6 +77,7 @@ public abstract class Coders {
 		String coordinates = ""+(char) (x+65) + (char) (y+65);
 		encodeAndSend("A", coordinates);
 		Resources.isOurTurn = false;
+		WarPhase.turnInfoPane.getTurnImg();
 	}
 
 	public static void sendExitMessage() {

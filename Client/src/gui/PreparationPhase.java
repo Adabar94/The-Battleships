@@ -3,7 +3,9 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,35 +17,40 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
 import core.Info;
-import core.Main;
 import core.Resources;
 import core.Resources.Constants;
-import game.AllyGrid;
-import game.Ship;
 
 @SuppressWarnings("serial")
-public class SetShips extends JDialog {
+public class PreparationPhase extends JDialog {
 	public static int actShipId = 0;
 	public static int shipsLeft = 14;
-	
-	public SetShips(GameFrame frame) {
+
+	public PreparationPhase(GameFrame frame) {
 		super(frame);
-		setLocationRelativeTo(frame);
 		setTitle(Constants.TITLE);
 		setJMenuBar(new Menu());
-		setSize(new Dimension(Constants.DEF_WIDTH + 16, Constants.DEF_HEIGHT + 62));
+		//setSize(new Dimension(Constants.DEF_WIDTH + 16, Constants.DEF_HEIGHT + 62));
 		setContentPane(contentPane());
 		setModal(true);
 		setResizable(false);
+		try {
+			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
+		} catch (IOException e) {
+			System.err.println("Icon not found!");
+		}
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				Main.exit();
+				Info.doYouWannaExit();
 			}
 		});
+		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -55,18 +62,29 @@ public class SetShips extends JDialog {
 	}
 
 	public JPanel contentPane() {
-		JPanel content = new JPanel() {
+		JPanel content = new JPanel();
+		content.setBackground(new Color(217, 217, 217));
+
+		JPanel top = new JPanel(new GridBagLayout());
+		top.setPreferredSize(new Dimension(top.getPreferredSize().width, 80));
+		top.setBackground(new Color(217,217,217));
+		JPanel title = new JPanel(){
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				try {
-					g.drawImage(ImageIO.read(new File(Constants.SET_SHIPS_BG_PATH)), 0, 0, getWidth(), getHeight(),
-							this);
+					g.drawImage(ImageIO.read(new File(Constants.IMG_PATH + "rozestaveni_lodi" + Constants.IMG_FORMATE)), 0,
+							0, getWidth(), getHeight(), this);
 				} catch (IOException e) {
-					System.err.println("Set ships background not found!");
+					System.err.println("Background not found!");
 				}
 			}
 		};
+		title.setPreferredSize(new Dimension(235, 24));
+		top.add(title);
+		
+		JPanel center = new JPanel();
+		JPanel leftPane = new JPanel();
 		JPanel shipsToAdd = new JPanel();
 		shipsToAdd.setLayout(new GridLayout(5, 2, 0, 0));
 		shipsToAdd.add(addRow((new Ship(1, 1, Constants.SHIP_HEPT_PATH))));
@@ -74,22 +92,38 @@ public class SetShips extends JDialog {
 		shipsToAdd.add(addRow((new Ship(4, 3, Constants.SHIP_TRIO_PATH))));
 		shipsToAdd.add(addRow((new Ship(7, 4, Constants.SHIP_DOUB_PATH))));
 		shipsToAdd.add(addRow((new Ship(11, 4, Constants.SHIP_SUBM_PATH))));
-		content.add(shipsToAdd);
+		leftPane.add(shipsToAdd);
+		JPanel midPane = new JPanel();
+		midPane.add(Resources.ally);
+
+		FlowLayout layout = new FlowLayout();
+		layout.setHgap(80);
+		layout.setVgap(20);
+		center.setLayout(layout);
+
+		center.add(leftPane);
+		center.add(midPane);
 		
-		Resources.ally = new AllyGrid();
-		content.add(Resources.ally);
-		JButton cont = new JButton("Pokraèovat");
-		cont.addActionListener(new ActionListener() {
+		JPanel bot = new JPanel();
+		bot.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		JButton continueButton = new JButton("Pokraèovat");
+		continueButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(shipsLeft == 0){
+				if (shipsLeft == 0 || Resources.debug) {
 					setVisible(false);
 				} else {
 					Info.error("Pøed pokraèováním musíte rozložit všechny lodì!");
 				}
 			}
 		});
-		content.add(cont);
+		bot.add(continueButton);
+
+		content.setLayout(new BorderLayout());
+		content.add(top, BorderLayout.NORTH);
+		content.add(center, BorderLayout.CENTER);
+		content.add(bot, BorderLayout.SOUTH);
+
 		return content;
 	}
 
@@ -105,14 +139,15 @@ public class SetShips extends JDialog {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				try {
-					g.drawImage(ImageIO.read(new File(Constants.IMG_PATH + ship.getCount() + Constants.IMG_FORMATE)), 0, 0, getWidth(), getHeight(), this);
+					g.drawImage(ImageIO.read(new File(Constants.IMG_PATH + ship.getCount() + Constants.IMG_FORMATE)), 0,
+							0, getWidth(), getHeight(), this);
 				} catch (IOException e) {
 					System.err.println("Number background not found!");
 				}
 			}
 		};
-		counter.setPreferredSize(new Dimension(32, 51));
-		counter.setBorder(new LineBorder(new Color(217, 217, 217), 5));
+		counter.setPreferredSize(new Dimension(30, 40));
+		counter.setBorder(new LineBorder(new Color(217, 217, 217), 0));
 		JPanel image = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -124,20 +159,52 @@ public class SetShips extends JDialog {
 				}
 			}
 		};
-		image.setPreferredSize(new Dimension(79, 51));
-		image.setBorder(new LineBorder(new Color(217, 217, 217), 5));
+		image.setPreferredSize(new Dimension(70, 40));
+		image.setBorder(new LineBorder(new Color(217, 217, 217), 0));
 		pane.add(counter, BorderLayout.LINE_START);
 		pane.add(image, BorderLayout.LINE_END);
 		pane.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(actShipId == 0 && ship.getCount() > 0){
+				if (actShipId == 0 && ship.getCount() > 0) {
 					actShipId = ship.getId();
-					ship.setCount(ship.getCount()-1);
-					ship.setId(ship.getId()+1);
+					ship.setCount(ship.getCount() - 1);
+					ship.setId(ship.getId() + 1);
 				}
 			}
 		});
 		return pane;
+	}
+
+	private class Ship {
+		int id;
+		int count;
+		String setShipPath;
+
+		public Ship(int id, int count, String setShipPath) {
+			this.id = id;
+			this.count = count;
+			this.setShipPath = setShipPath;
+		}
+
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public int getCount() {
+			return count;
+		}
+
+		public void setCount(int count) {
+			this.count = count;
+		}
+
+		public String getSetShipPath() {
+			return setShipPath;
+		}
 	}
 }

@@ -17,7 +17,8 @@ import javax.swing.border.LineBorder;
 import core.Info;
 import core.Resources;
 import core.Resources.Constants;
-import gui.SetShips;
+import gui.PreparationPhase;
+import gui.WarPhase;
 
 /**
  * Ally grid
@@ -34,7 +35,7 @@ public class AllyGrid extends JPanel {
 	 */
 	public AllyGrid() {
 		setLayout(new GridLayout(15, 15, 0, 0));
-		setBorder(new LineBorder(Color.WHITE, 1));
+		setBorder(new LineBorder(new Color(0, 163, 211), 3));
 		setOpaque(true);
 
 		for (int i = 0; i < coordinate.length; i++) {
@@ -59,6 +60,54 @@ public class AllyGrid extends JPanel {
 		coordinate[x][y].setShoot();
 		coordinate[x][y].setBackgroundImage();
 		coordinate[x][y].repaint();
+
+		if (coordinate[x][y].getShip() != 0 && isSinked(x, y, 2)) {
+			WarPhase.shipCounter.removeAllyShip(getSinkedShipSize(x, y));
+		}
+	}
+
+	public boolean isSinked(int x, int y, int cont) {
+		if (x < 0 || x > 15 || y < 0 || y > 15 || coordinate[x][y].ship == 0) {
+			return true;
+		}
+		if (!coordinate[x][y].shoot) {
+			return false;
+		}
+		boolean topNbot = true;
+		if (coordinate[x][y].ship == 1) {
+			topNbot = (y == 0 || coordinate[x][y - 1].ship == 0 || coordinate[x][y - 1].shoot) && isSinked(x, y + 1, 2);
+			if (y != 0 && coordinate[x][y - 1].ship != 0 && coordinate[x][y - 1].shoot) {
+			}
+		}
+		if (cont == 0) {
+			return isSinked(x - 1, y, 0) && topNbot;
+		}
+		if (cont == 1) {
+			return isSinked(x + 1, y, 1) && topNbot;
+		}
+		return isSinked(x - 1, y, 0) && isSinked(x + 1, y, 1) && topNbot;
+	}
+
+	public int getSinkedShipSize(int x, int y){
+		int size = 0;
+		coordinate[x][y].setSink();
+		size++;
+		for(int i = x-1; i <= x+1; i++){
+			for(int j = y-1; j <= y+1; j++){
+				if((i == x && j == y) || i < 0 || i > 15 || j < 0 || j > 15){
+					continue;
+				}
+				if(coordinate[i][j].getShip() != 0 && !coordinate[i][j].sinked){
+					size+=getSinkedShipSize(i, j);
+				}
+				if(coordinate[i][j].getShip() == 0){
+					coordinate[i][j].setShoot();
+					coordinate[i][j].setBackgroundImage();
+					coordinate[i][j].repaint();
+				}
+			}
+		}
+		return size;
 	}
 
 	/**
@@ -135,9 +184,8 @@ public class AllyGrid extends JPanel {
 		} else {
 			return;
 		}
-		SetShips.actShipId = 0;
-		SetShips.shipsLeft--;
-		repaintAll();
+		PreparationPhase.actShipId = 0;
+		PreparationPhase.shipsLeft--;
 
 	}
 
@@ -187,18 +235,6 @@ public class AllyGrid extends JPanel {
 	}
 
 	/**
-	 * Repaint whole ally grid
-	 */
-	public void repaintAll() {
-		for (Cell[] line : coordinate) {
-			for (Cell cell : line) {
-				cell.setBackgroundImage();
-				cell.repaint();
-			}
-		}
-	}
-
-	/**
 	 * One cell of ally grid
 	 * 
 	 * @author Adam Barák
@@ -208,6 +244,7 @@ public class AllyGrid extends JPanel {
 		int ship;
 		int part;
 		boolean shoot;
+		boolean sinked;
 		String imagePath;
 
 		/**
@@ -226,7 +263,7 @@ public class AllyGrid extends JPanel {
 		 *            - ship id
 		 */
 		public void setShip(int ship) {
-			this.ship = ship;
+			setShip(ship, 0);
 		}
 
 		/**
@@ -238,8 +275,11 @@ public class AllyGrid extends JPanel {
 		 *            - part of ship
 		 */
 		public void setShip(int ship, int part) {
-			this.ship = ship;
 			this.part = part;
+			this.ship = ship;
+			setBackgroundImage();
+			repaint();
+
 		}
 
 		/**
@@ -247,6 +287,10 @@ public class AllyGrid extends JPanel {
 		 */
 		public void setShoot() {
 			this.shoot = true;
+		}
+
+		public void setSink() {
+			sinked = true;
 		}
 
 		/**
@@ -268,8 +312,8 @@ public class AllyGrid extends JPanel {
 			addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (SetShips.actShipId != 0) {
-						Resources.ally.addShip(SetShips.actShipId, x, y);
+					if (PreparationPhase.actShipId != 0) {
+						Resources.ally.addShip(PreparationPhase.actShipId, x, y);
 					}
 				}
 			});
@@ -363,7 +407,7 @@ public class AllyGrid extends JPanel {
 			try {
 				g.drawImage(ImageIO.read(new File(imagePath)), 0, 0, null);
 			} catch (IOException e) {
-				System.err.println("Background not found in images folder!");
+				System.err.println("Nenalezen obrázek lodì!");
 			}
 		}
 	}

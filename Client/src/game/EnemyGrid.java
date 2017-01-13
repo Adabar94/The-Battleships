@@ -15,8 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import connection.Coders;
+import core.Info;
 import core.Resources;
 import core.Resources.Constants;
+import gui.WarPhase;
 
 /**
  * Enemy grid
@@ -26,6 +28,7 @@ import core.Resources.Constants;
  */
 @SuppressWarnings("serial")
 public class EnemyGrid extends JPanel {
+	int pom;
 	Cell[][] coordinate = new Cell[15][15];
 
 	/**
@@ -33,7 +36,7 @@ public class EnemyGrid extends JPanel {
 	 */
 	public EnemyGrid() {
 		setLayout(new GridLayout(15, 15, 0, 0));
-		setBorder(new LineBorder(Color.WHITE, 1));
+		setBorder(new LineBorder(new Color(221, 28, 12), 3));
 		setOpaque(true);
 
 		for (int i = 0; i < coordinate.length; i++) {
@@ -59,8 +62,16 @@ public class EnemyGrid extends JPanel {
 		coordinate[x][y].setBackgroundImage();
 		coordinate[x][y].repaint();
 		if (isSink) {
+			pom = 0;
 			sinked(x, y);
+			WarPhase.shipCounter.removeEnemyShip(pom);
+			WarPhase.botInfoPane.sync("sink");
+		} else if (isShip) {
+			WarPhase.botInfoPane.sync("hit");
+		} else {
+			WarPhase.botInfoPane.sync("miss");
 		}
+		
 	}
 
 	/**
@@ -69,15 +80,22 @@ public class EnemyGrid extends JPanel {
 	 * @param y coordinate of part of sinked ship
 	 */
 	public void sinked(int x, int y) {
+		coordinate[x][y].sinked = true;
+		pom++;
 		for (int i = x - 1; i <= x + 1; i++) {
 			for (int j = y - 1; j <= y + 1; j++) {
+				if(i == x && j == y || i < 0 || i > 15 || j < 0 || j > 15){
+					continue;
+				}
 				if (coordinate[i][j].isShip()) {
-					sinked(i, j);
+					if(!coordinate[i][j].sinked){
+						sinked(i, j);
+					}
 				} else {
 					coordinate[i][j].setShip(false);
 					coordinate[i][j].setShoot();
-					coordinate[x][y].setBackgroundImage();
-					coordinate[x][y].repaint();
+					coordinate[i][j].setBackgroundImage();
+					coordinate[i][j].repaint();
 				}
 			}
 		}
@@ -91,6 +109,7 @@ public class EnemyGrid extends JPanel {
 	public class Cell extends JButton {
 		boolean ship;
 		boolean shoot;
+		boolean sinked;
 		String imagePath;
 
 		/**
@@ -128,11 +147,16 @@ public class EnemyGrid extends JPanel {
 			setBackground(new Color(0, 163, 211));
 			imagePath = Constants.FOG_PATH;
 			shoot = false;
+			sinked = false;
 			addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (Resources.isOurTurn) {
-						Coders.sendAttackPosition(x, y);
+						if (shoot){
+							Info.error("Na pozici "+x+","+y+" jste již støílel. Vyberte prosím jinou pozici.");
+						} else {
+							Coders.sendAttackPosition(x, y);
+						}
 					}
 				}
 			});
@@ -161,7 +185,7 @@ public class EnemyGrid extends JPanel {
 			try {
 				g.drawImage(ImageIO.read(new File(imagePath)), 0, 0, null);
 			} catch (IOException e) {
-				System.err.println("Background not found in images folder!");
+				System.err.println("Nenalezen obrázek lodì!");
 			}
 		}
 	}

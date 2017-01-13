@@ -26,15 +26,7 @@ public class Menu extends JMenuBar {
 
 	private JMenu game() {
 		JMenu game = new JMenu("Hra");
-		game.add(new Item("Nová hra", new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Main.restart();
-				System.out.println("TO DO");
-			}
-		}));
-		game.addSeparator();
-		game.add(new Item("Konec", new ActionListener() {
+		game.add(new Item("Ukonèit", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Main.exit();

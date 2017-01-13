@@ -14,7 +14,6 @@ public class GameFrame extends JFrame {
 		super(Constants.TITLE);
         setUndecorated(true);
         setVisible(true);
-        setLocationRelativeTo(null);
         setResizable(false);
 		try {
 			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));

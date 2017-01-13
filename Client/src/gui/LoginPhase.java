@@ -4,7 +4,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,7 +21,7 @@ import core.Main;
 import core.Resources.Constants;
 
 @SuppressWarnings("serial")
-public class LogIn extends JDialog {
+public class LoginPhase extends JDialog {
 	String nick;
 	String server;
 	int port;
@@ -27,20 +30,27 @@ public class LogIn extends JDialog {
 	JTextField serverField = new JTextField(Config.serverIP);
 	JTextField portField = new JTextField(Integer.toString(Config.serverPort));
 
-	public LogIn(GameFrame frame) {
+	public LoginPhase(GameFrame frame) {
 		super(frame);
 		setLocationRelativeTo(frame);
 		setTitle(Constants.TITLE);
-		setSize(new Dimension(Constants.START_WIDTH, Constants.START_HEIGHT));
+
 		setContentPane(getContent());
 		setModal(true);
 		setResizable(false);
+		try {
+			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
+		} catch (IOException e) {
+			System.err.println("Icon not found!");
+		}
 		addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 				Main.exit();
 		    }
 		});
+		setSize(new Dimension(300, 200));
+        setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
@@ -57,9 +67,9 @@ public class LogIn extends JDialog {
 		content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		content.setOpaque(true);
 
-		JLabel nick = new JLabel(Constants.NICKNAME);
-		JLabel serv = new JLabel(Constants.SERVER_IP);
-		JLabel port = new JLabel(Constants.PORT);
+		JLabel nick = new JLabel("Pøezdívka");
+		JLabel serv = new JLabel("IP Serveru:");
+		JLabel port = new JLabel("Port:");
 
 		content.add(nick);
 		content.add(nicknameField);
@@ -96,7 +106,7 @@ public class LogIn extends JDialog {
 	 * @return continue button
 	 */
 	private JButton getContinueButton() {
-		JButton button = new JButton(Constants.CONTINUE);
+		JButton button = new JButton("Pokraèovat");
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,11 +128,12 @@ public class LogIn extends JDialog {
 	private boolean validateValues(){
 		// Validate nickname
 		nick = nicknameField.getText();
-		if(nick.isEmpty() || nick.length()>13){
-			Info.error(Constants.NICKNAME_INVALID);
+		if(nick.isEmpty() || nick.length()>12){
+			Info.error("Pøezdívka není validní. Zadejte pøezdívku o velikosti mezi 1 a 12 znaky.");
 			return false;
 		}
 		// Validate serverIP
+		final String SERVER_IP_INVALID = "IP serveru není validní. Zadejte IP ve tvaru x.x.x.x kde x je èíslo mezi 0 a 255.";
 		server = serverField.getText();
 		if(!server.equals("localhost")){
 			String[] itemsOfIp = server.split("\\.");	
@@ -131,26 +142,27 @@ public class LogIn extends JDialog {
 					try{
 						Integer.parseInt(item);
 					} catch (NumberFormatException e){
-						Info.error(Constants.SERVER_IP_INVALID);
+						Info.error(SERVER_IP_INVALID);
 						return false;
 					}
 				}
 			} else {
-				Info.error(Constants.SERVER_IP_INVALID);
+				Info.error(SERVER_IP_INVALID);
 				return false;
 			}
 		}
 		
 		
 		// Validate port
+		final String PORT_INVALID = "Port serveru není validní. Zadejte port ve tvaru xxxx kde x je èíslo.";
 		try{
 			port = Integer.parseInt(portField.getText());
 		} catch (NumberFormatException e){
-			Info.error(Constants.PORT_INVALID);
+			Info.error(PORT_INVALID);
 			return false;
 		}
 		if(port < 0 || port > 9999){
-			Info.error(Constants.PORT_INVALID);
+			Info.error(PORT_INVALID);
 			return false;
 		}
 		

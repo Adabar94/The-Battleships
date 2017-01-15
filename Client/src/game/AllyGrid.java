@@ -66,6 +66,17 @@ public class AllyGrid extends JPanel {
 		}
 	}
 
+	/**
+	 * Checks if ship is sinked
+	 * 
+	 * @param x
+	 *            coordinate
+	 * @param y
+	 *            coordinate
+	 * @param cont
+	 *            parameter for recursive method
+	 * @return true if is sinked, false if not
+	 */
 	public boolean isSinked(int x, int y, int cont) {
 		if (x < 0 || x > 15 || y < 0 || y > 15 || coordinate[x][y].ship == 0) {
 			return true;
@@ -88,19 +99,28 @@ public class AllyGrid extends JPanel {
 		return isSinked(x - 1, y, 0) && isSinked(x + 1, y, 1) && topNbot;
 	}
 
-	public int getSinkedShipSize(int x, int y){
+	/**
+	 * Gets number of blocks that sinked ship had
+	 * 
+	 * @param x
+	 *            coordinate
+	 * @param y
+	 *            coordinate
+	 * @return number of blocks that sinked ship had
+	 */
+	public int getSinkedShipSize(int x, int y) {
 		int size = 0;
 		coordinate[x][y].setSink();
 		size++;
-		for(int i = x-1; i <= x+1; i++){
-			for(int j = y-1; j <= y+1; j++){
-				if((i == x && j == y) || i < 0 || i > 15 || j < 0 || j > 15){
+		for (int i = x - 1; i <= x + 1; i++) {
+			for (int j = y - 1; j <= y + 1; j++) {
+				if ((i == x && j == y) || i < 0 || i > 15 || j < 0 || j > 15) {
 					continue;
 				}
-				if(coordinate[i][j].getShip() != 0 && !coordinate[i][j].sinked){
-					size+=getSinkedShipSize(i, j);
+				if (coordinate[i][j].getShip() != 0 && !coordinate[i][j].sinked) {
+					size += getSinkedShipSize(i, j);
 				}
-				if(coordinate[i][j].getShip() == 0){
+				if (coordinate[i][j].getShip() == 0) {
 					coordinate[i][j].setShoot();
 					coordinate[i][j].setBackgroundImage();
 					coordinate[i][j].repaint();
@@ -196,7 +216,7 @@ public class AllyGrid extends JPanel {
 	 * @param toX
 	 * @param fromY
 	 * @param toY
-	 * @return true if ship is placable, false if not placable
+	 * @return true if ship is placeable, false if not placeable
 	 */
 	public boolean isReadyForShip(int fromX, int toX, int fromY, int toY) {
 		for (int x = fromX; x <= toX; x++) {
@@ -286,9 +306,12 @@ public class AllyGrid extends JPanel {
 		 * Set cell as wrecked
 		 */
 		public void setShoot() {
-			this.shoot = true;
+			shoot = true;
 		}
 
+		/**
+		 * Set cell as sinked
+		 */
 		public void setSink() {
 			sinked = true;
 		}

@@ -29,10 +29,6 @@ public abstract class Resources {
 	public static EnemyGrid enemy;
 
 	public abstract class Constants {
-		// Sizes of window
-		public static final int DEF_WIDTH = 800;
-		public static final int DEF_HEIGHT = 480;
-
 		public static final String TITLE = "Lodì";
 
 		public static final String IMG_PATH = "images/";

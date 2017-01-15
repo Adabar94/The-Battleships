@@ -153,7 +153,7 @@ public class EnemyGrid extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if (Resources.isOurTurn) {
 						if (shoot){
-							Info.error("Na pozici "+x+","+y+" jste již støílel. Vyberte prosím jinou pozici.");
+							Info.error("Pozici "+x+","+y+" Je již odhalena. Vyberte prosím jinou pozici.");
 						} else {
 							Coders.sendAttackPosition(x, y);
 						}
@@ -161,6 +161,7 @@ public class EnemyGrid extends JPanel {
 				}
 			});
 		}
+		
 		/**
 		* Select background
 		*/

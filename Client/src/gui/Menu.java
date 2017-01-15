@@ -18,12 +18,20 @@ import core.Main;
 
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar {
+	
+	/**
+	 * Constructor of menu
+	 */
 	public Menu() {
 		super();
 		this.add(game());
 		this.add(help());
 	}
 
+	/**
+	 * Construct game menu bar item
+	 * @return
+	 */
 	private JMenu game() {
 		JMenu game = new JMenu("Hra");
 		game.add(new Item("Ukonèit", new ActionListener() {
@@ -34,7 +42,11 @@ public class Menu extends JMenuBar {
 		}));
 		return game;
 	}
-
+	
+	/**
+	 * Construct help menu bar item
+	 * @return
+	 */
 	private JMenu help() {
 		JMenu help = new JMenu("Nápovìda");
 		help.add(new Item("Jak hrát", null));
@@ -57,7 +69,17 @@ public class Menu extends JMenuBar {
 		return help;
 	}
 
+	/**
+	 * Class of menu item
+	 * @author Adam Barák
+	 *
+	 */
 	private class Item extends JMenuItem {
+		/**
+		 * Constructor for Item class
+		 * @param name - name of item
+		 * @param a - action on click
+		 */
 		private Item(String name, ActionListener a) {
 			this.setText(name);
 			this.addActionListener(a);

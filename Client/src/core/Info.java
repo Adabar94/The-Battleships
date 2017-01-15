@@ -23,7 +23,6 @@ public abstract class Info {
 		final JDialog dialog = new JDialog();
 		dialog.setTitle(Constants.TITLE);
 		dialog.setContentPane(new JOptionPane("Èekání na druhého hráèe", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null));
-		
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override

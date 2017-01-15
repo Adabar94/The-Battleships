@@ -8,8 +8,16 @@ import javax.swing.JFrame;
 
 import core.Resources.Constants;
 
+/**
+ * Dummy frame for all game phases
+ * @author Adam
+ *
+ */
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame {
+	/**
+	 * Constructor
+	 */
 	public GameFrame() {
 		super(Constants.TITLE);
         setUndecorated(true);

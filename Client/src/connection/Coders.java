@@ -13,6 +13,7 @@ public abstract class Coders {
 	 */
 
 	public static void decode(String order) {
+		order = order == null ? "ES" : order;
 		switch (order.charAt(0)) {
 		case 'R':
 			gameIsReady(order);

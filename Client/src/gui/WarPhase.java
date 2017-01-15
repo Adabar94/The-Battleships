@@ -11,40 +11,21 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
-import core.Info;
 import core.Resources;
 import core.Resources.Constants;
 
 @SuppressWarnings("serial")
-public class WarPhase extends JDialog {
+public class WarPhase extends GameDialog {
 	public static BotInfoPane botInfoPane;
 	public static TurnInfoPane turnInfoPane;
 	public static ShipCounter shipCounter;
 
-	public WarPhase(GameFrame frame) {
-		super(frame);
-		
-		setTitle(Constants.TITLE);
-		setJMenuBar(new Menu());
+	public WarPhase() {
+		super();
+		setMenu();
 		setContentPane(contentPane());
-		setModal(true);
-		setResizable(false);
-		try {
-			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
-		} catch (IOException e) {
-			System.err.println("Icon not found!");
-		}
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				Info.doYouWannaExit();
-			}
-		});
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -55,10 +36,6 @@ public class WarPhase extends JDialog {
 		pane.add(top(), BorderLayout.NORTH);
 		pane.add(mid(), BorderLayout.CENTER);
 		pane.add(bot(), BorderLayout.SOUTH);
-
-		// pane.add(Resources.ally);
-		// Resources.enemy = new EnemyGrid();
-		// pane.add(Resources.enemy);
 		return pane;
 	}
 

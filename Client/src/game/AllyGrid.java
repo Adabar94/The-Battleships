@@ -255,6 +255,34 @@ public class AllyGrid extends JPanel {
 	}
 
 	/**
+	 * Gets core coordinates in alfas in String of ship with shipID
+	 * 
+	 * @param shipID
+	 *            id of ship
+	 * @return coordinates in Strings
+	 */
+	public String getCoreOfShip(int shipID) {
+		int shipPart;
+
+		if (shipID == 1) {
+			shipPart = 2;
+		} else if (shipID < 7) {
+			shipPart = 1;
+		} else {
+			shipPart = 0;
+		}
+
+		for (int i = 0; i < coordinate.length; i++) {
+			for (int j = 0; j < coordinate[i].length; j++) {
+				if (coordinate[i][j].getShip() == shipID && coordinate[i][j].getPart() == shipPart) {
+					return "" + (char) i + 65 + (char) j + 65;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * One cell of ally grid
 	 * 
 	 * @author Adam Barák
@@ -274,6 +302,15 @@ public class AllyGrid extends JPanel {
 		 */
 		public int getShip() {
 			return ship;
+		}
+
+		/**
+		 * Getter of part
+		 * 
+		 * @return ship part
+		 */
+		public int getPart() {
+			return part;
 		}
 
 		/**

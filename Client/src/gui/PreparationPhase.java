@@ -15,9 +15,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
 import core.Info;
@@ -25,40 +23,17 @@ import core.Resources;
 import core.Resources.Constants;
 
 @SuppressWarnings("serial")
-public class PreparationPhase extends JDialog {
+public class PreparationPhase extends GameDialog {
 	public static int actShipId = 0;
 	public static int shipsLeft = 14;
 
-	public PreparationPhase(GameFrame frame) {
-		super(frame);
-		setTitle(Constants.TITLE);
-		setJMenuBar(new Menu());
-		//setSize(new Dimension(Constants.DEF_WIDTH + 16, Constants.DEF_HEIGHT + 62));
+	public PreparationPhase() {
+		super();
+		setMenu();
 		setContentPane(contentPane());
-		setModal(true);
-		setResizable(false);
-		try {
-			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
-		} catch (IOException e) {
-			System.err.println("Icon not found!");
-		}
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				Info.doYouWannaExit();
-			}
-		});
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-	}
-
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		if (!visible) {
-			((GameFrame) getParent()).dispose();
-		}
 	}
 
 	public JPanel contentPane() {

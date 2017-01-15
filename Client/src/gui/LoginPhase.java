@@ -1,27 +1,21 @@
 package gui;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import core.Config;
 import core.Info;
-import core.Main;
-import core.Resources.Constants;
+
 
 @SuppressWarnings("serial")
-public class LoginPhase extends JDialog {
+public class LoginPhase extends GameDialog {
 	String nick;
 	String server;
 	int port;
@@ -30,36 +24,12 @@ public class LoginPhase extends JDialog {
 	JTextField serverField = new JTextField(Config.serverIP);
 	JTextField portField = new JTextField(Integer.toString(Config.serverPort));
 
-	public LoginPhase(GameFrame frame) {
-		super(frame);
-		setLocationRelativeTo(frame);
-		setTitle(Constants.TITLE);
-
+	public LoginPhase() {
+		super(300, 200);
 		setContentPane(getContent());
-		setModal(true);
-		setResizable(false);
-		try {
-			setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
-		} catch (IOException e) {
-			System.err.println("Icon not found!");
-		}
-		addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				Main.exit();
-		    }
-		});
-		setSize(new Dimension(300, 200));
         setLocationRelativeTo(null);
 		setVisible(true);
-	}
-	
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		if (!visible) {
-			((GameFrame) getParent()).dispose();
-		}
-	}
+	} 
 
 	private JPanel getContent() {
 		JPanel content = new JPanel();

@@ -25,7 +25,7 @@ public class Main {
 	public static void main(String[] args) {
 		Config.config();
 
-		new LoginPhase(new GameFrame());
+		new LoginPhase();
 		
 		Resources.ally = new AllyGrid();
 		Resources.enemy = new EnemyGrid();
@@ -34,7 +34,7 @@ public class Main {
 		Resources.writer = new Writer(connection.getSocket());
 		Resources.reader = new Reader(connection.getSocket());
 		
-		new PreparationPhase(new GameFrame());
+		new PreparationPhase();
 		
 		Coders.sendLoginMessage();
 		
@@ -46,7 +46,7 @@ public class Main {
 		}
 		
 		wait.dispose();
-		new WarPhase(new GameFrame());
+		new WarPhase();
 	}
 	
 	/**

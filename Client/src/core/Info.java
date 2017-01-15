@@ -72,7 +72,6 @@ public abstract class Info {
 	 * @param dialog
 	 */
 	private static void create(JDialog dialog) {
-		dialog.setAlwaysOnTop(true);
 		try {
 			dialog.setIconImage(ImageIO.read(new File(Constants.ICON_PATH)));
 		} catch (IOException e) {

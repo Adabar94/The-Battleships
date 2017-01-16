@@ -1,12 +1,23 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <pthread.h>
+#include <string.h>
+
+#include "player.h"
+
 #ifndef _GAME_H
 #define _GAME_H
 
 struct game 
 {
 	int ID;
-	int state; /* game state 0 waiting for second player / 1 waiting for ship preparation / 2 playing*/
 	int turn; 
-	int p_ID[2];
+	struct player player[2];
 };
+
+void createGame(int gid, int socketPlayerOne, int socketPlayerTwo);
+
+void decode(struct player *owner, char message[]);
 
 #endif

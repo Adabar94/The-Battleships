@@ -84,7 +84,7 @@ public class EnemyGrid extends JPanel {
 		pom++;
 		for (int i = x - 1; i <= x + 1; i++) {
 			for (int j = y - 1; j <= y + 1; j++) {
-				if(i == x && j == y || i < 0 || i > 15 || j < 0 || j > 15){
+				if(i == x && j == y || i < 0 || i > 14 || j < 0 || j > 14){
 					continue;
 				}
 				if (coordinate[i][j].isShip()) {

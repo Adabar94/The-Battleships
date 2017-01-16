@@ -81,11 +81,23 @@ public class PreparationPhase extends GameDialog {
 		
 		JPanel bot = new JPanel();
 		bot.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		JButton randomButton = new JButton("Náhodné rozestavìní");
+		randomButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (shipsLeft == 14) {
+					Resources.ally.placeShipsRandom();
+				} else {
+					Info.error("Nìkteré lodì již byli umístìny. Nelze náhodnì rozdìlit!");
+				}
+			}
+		});
+		bot.add(randomButton);
 		JButton continueButton = new JButton("Pokraèovat");
 		continueButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (shipsLeft == 0 || Resources.debug) {
+				if (shipsLeft == 0) {
 					setVisible(false);
 				} else {
 					Info.error("Pøed pokraèováním musíte rozložit všechny lodì!");

@@ -16,8 +16,6 @@ import game.EnemyGrid;
  *
  */
 public abstract class Resources {
-	public static boolean debug = true;
-
 	public static Semaphore gameIsReady = new Semaphore(0);
 
 	public static Reader reader;

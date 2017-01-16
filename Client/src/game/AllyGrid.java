@@ -29,6 +29,7 @@ import gui.WarPhase;
 @SuppressWarnings("serial")
 public class AllyGrid extends JPanel {
 	Cell[][] coordinate = new Cell[15][15];
+	boolean randomShipsFlag = false;
 
 	/**
 	 * Constructor of Ally grid
@@ -78,7 +79,7 @@ public class AllyGrid extends JPanel {
 	 * @return true if is sinked, false if not
 	 */
 	public boolean isSinked(int x, int y, int cont) {
-		if (x < 0 || x > 15 || y < 0 || y > 15 || coordinate[x][y].ship == 0) {
+		if (x < 0 || x > 14 || y < 0 || y > 14 || coordinate[x][y].ship == 0) {
 			return true;
 		}
 		if (!coordinate[x][y].shoot) {
@@ -114,7 +115,7 @@ public class AllyGrid extends JPanel {
 		size++;
 		for (int i = x - 1; i <= x + 1; i++) {
 			for (int j = y - 1; j <= y + 1; j++) {
-				if ((i == x && j == y) || i < 0 || i > 15 || j < 0 || j > 15) {
+				if ((i == x && j == y) || i < 0 || i > 14 || j < 0 || j > 14) {
 					continue;
 				}
 				if (coordinate[i][j].getShip() != 0 && !coordinate[i][j].sinked) {
@@ -222,7 +223,9 @@ public class AllyGrid extends JPanel {
 		for (int x = fromX; x <= toX; x++) {
 			for (int y = fromY; y <= toY; y++) {
 				if (x < 0 || y < 0 || x > 14 || y > 14 || coordinate[x][y].getShip() > 0) {
-					Info.error("Zde loï nelze umístit. Pøekrývala by se s jinou lodí, nebo by byla mimo herní møížku.");
+					if(!randomShipsFlag){
+						Info.error("Zde loï nelze umístit. Pøekrývala by se s jinou lodí, nebo by byla mimo herní møížku.");						
+					}
 					return false;
 				}
 			}
@@ -246,12 +249,27 @@ public class AllyGrid extends JPanel {
 					continue;
 				}
 				if (coordinate[x][y].getShip() > 0) {
-					Info.error("Lodì se nesmìjí dotýkat.");
+					if(!randomShipsFlag){
+						Info.error("Lodì se nesmìjí dotýkat.");
+					}
 					return false;
 				}
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Pseudo random place ships on ally board
+	 */
+	public void placeShipsRandom() {
+		randomShipsFlag = true;
+		for (int i = 0; i < 15; i++) {
+			PreparationPhase.actShipId = i;
+			while(PreparationPhase.actShipId != 0){
+				addShip(i, (int) (Math.random()*15), (int) (Math.random()*15));
+			}
+		}
 	}
 
 	/**

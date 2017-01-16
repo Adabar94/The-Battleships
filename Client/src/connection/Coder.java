@@ -6,7 +6,7 @@ import core.Main;
 import core.Resources;
 import gui.WarPhase;
 
-public abstract class Coders {
+public abstract class Coder {
 
 	/*
 	 * Receive decoding
@@ -27,7 +27,7 @@ public abstract class Coders {
 		case 'E':
 			if (order.charAt(1) == 'S') {
 				Info.error("Server ukonèil komunikaci, hra je ukonèena.");
-			} else if (order.charAt(1) == 'N'){
+			} else if (order.charAt(1) == 'N') {
 				Info.error("Server není dostupný. Ukonèuji aplikaci.");
 			} else {
 				Info.info("Opponent opustil hru, zvítìzil jste.");
@@ -42,22 +42,24 @@ public abstract class Coders {
 
 	public static void gameIsReady(String message) {
 		Resources.isOurTurn = message.charAt(1) == '0';
+		Info.info("Pøipojeno ke hráèi: "+message.substring(2));
 		Resources.gameIsReady.release(2);
 	}
 
 	public static void recvAttackResult(String message) {
 		message = message.toUpperCase();
-		Resources.enemy.shoot(message.charAt(1), message.charAt(2),
-				message.charAt(3) != '0' ? true : false, message.charAt(3) != '0' && message.charAt(4) != '0' ? true : false);
-		if(message.charAt(4) == '2') {
-			Info.info("Zvítìzil jste!");
+		if (message.charAt(3) == '3') {
+			Info.info("Zvítìzil jste! Potopil jste poslední nepøátelskou loï!");
 			Main.exit();
 		}
+		Resources.enemy.shoot(message.charAt(1), message.charAt(2), message.charAt(3) != '0' ? true : false,
+				message.charAt(3) == '2' ? true : false);
+
 	}
 
 	public static void recvDefendPosition(String message) {
 		message = message.toUpperCase();
-		if(message.length() > 3 && message.charAt(3) == 'D'){
+		if (message.charAt(3) == '3') {
 			Info.info("Nepøítel potopil vaši poslední loï. Prohrál jste!");
 			Main.exit();
 		}
@@ -71,11 +73,15 @@ public abstract class Coders {
 	 */
 
 	public static void sendLoginMessage() {
-		encodeAndSend("L", String.format("%02d", Config.nick.length()) + Config.nick);
+		StringBuilder builder = new StringBuilder();
+		for (int i = 1; i < 15; i++) {
+			builder.append(Resources.ally.getCoreOfShip(i));
+		}
+		encodeAndSend("L", String.format("%02d", Config.nick.length()) + Config.nick + builder.toString());
 	}
 
 	public static void sendAttackPosition(int x, int y) {
-		String coordinates = ""+(char) (x+65) + (char) (y+65);
+		String coordinates = "" + (char) (x + 65) + (char) (y + 65);
 		encodeAndSend("A", coordinates);
 		Resources.isOurTurn = false;
 		WarPhase.turnInfoPane.getTurnImg();

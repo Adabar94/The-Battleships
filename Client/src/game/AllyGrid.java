@@ -275,7 +275,7 @@ public class AllyGrid extends JPanel {
 		for (int i = 0; i < coordinate.length; i++) {
 			for (int j = 0; j < coordinate[i].length; j++) {
 				if (coordinate[i][j].getShip() == shipID && coordinate[i][j].getPart() == shipPart) {
-					return "" + (char) i + 65 + (char) j + 65;
+					return "" + (char) (i + 65) + (char) (j + 65);
 				}
 			}
 		}

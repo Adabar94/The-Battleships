@@ -23,7 +23,7 @@ public class Writer {
 		try {
 			writer = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
 		} catch (IOException e) {
-			Coders.decode("ES");
+			Coder.decode("ES");
 		}
 	}
 

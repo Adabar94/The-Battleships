@@ -13,7 +13,11 @@ import javax.swing.JTextField;
 import core.Config;
 import core.Info;
 
-
+/**
+ * Login dialog
+ * @author Adam Barák
+ *
+ */
 @SuppressWarnings("serial")
 public class LoginPhase extends GameDialog {
 	String nick;
@@ -24,6 +28,9 @@ public class LoginPhase extends GameDialog {
 	JTextField serverField = new JTextField(Config.serverIP);
 	JTextField portField = new JTextField(Integer.toString(Config.serverPort));
 
+	/**
+	 * Constructor
+	 */
 	public LoginPhase() {
 		super(300, 200);
 		setContentPane(getContent());
@@ -31,6 +38,10 @@ public class LoginPhase extends GameDialog {
 		setVisible(true);
 	} 
 
+	/**
+	 * Method getContent creates and returns content panel of dialog 
+	 * @return content pane
+	 */
 	private JPanel getContent() {
 		JPanel content = new JPanel();
 		content.setLayout(new GridLayout(4, 2, 10, 10));

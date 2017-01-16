@@ -31,7 +31,7 @@ public class Connection {
 		try {
 			s = new Socket(host, port);
 		} catch (IOException e) {
-			Coders.decode("EN");
+			Coder.decode("EN");
 		}
 	}
 

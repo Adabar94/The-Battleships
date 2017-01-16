@@ -2,7 +2,7 @@ package core;
 
 import javax.swing.JDialog;
 
-import connection.Coders;
+import connection.Coder;
 import connection.Connection;
 import connection.Reader;
 import connection.Writer;
@@ -36,7 +36,7 @@ public class Main {
 		
 		new PreparationPhase();
 		
-		Coders.sendLoginMessage();
+		Coder.sendLoginMessage();
 		
 		JDialog wait = Info.waitingForSecondPlayer();
 		try {
@@ -59,7 +59,7 @@ public class Main {
 			System.err.println("Reader je již uzavøen");
 		}
 		try{
-			Coders.sendExitMessage();
+			Coder.sendExitMessage();
 			Resources.writer.close();
 			connection.close();
 		} catch (NullPointerException e){

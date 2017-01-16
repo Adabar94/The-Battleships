@@ -38,7 +38,7 @@ public class Reader extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			Coders.decode(getMessage());
+			Coder.decode(getMessage());
 		}
 	}
 
@@ -51,7 +51,7 @@ public class Reader extends Thread {
 		try {
 			return reader.readLine();
 		} catch (IOException e) {
-			Coders.decode("ES");
+			Coder.decode("ES");
 			return null;
 		}
 	}

@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import connection.Coders;
+import connection.Coder;
 import core.Info;
 import core.Resources;
 import core.Resources.Constants;
@@ -155,7 +155,7 @@ public class EnemyGrid extends JPanel {
 						if (shoot){
 							Info.error("Pozici "+x+","+y+" Je již odhalena. Vyberte prosím jinou pozici.");
 						} else {
-							Coders.sendAttackPosition(x, y);
+							Coder.sendAttackPosition(x, y);
 						}
 					}
 				}

@@ -21,7 +21,13 @@ void decode(struct player *owner, char message[]) {
 		// Grid
 		memset(owner->grid, 0, sizeof(owner->grid[0][0]) * 15 * 15);
 		for(i = 1; i < 15; i++){
-			buildShip(owner, i, ((int) (message[point++]) - 65), ((int) (message[point++]) - 65));
+			x = (int) (message[point++]) - 65;
+			y = (int) (message[point++]) - 65;
+			if (x < 0 || x >14 ||y < 0 || x > 14){
+				printf("ERROROUS COORDINATES!");
+				decode(owner, "E");
+			}
+			buildShip(owner, i, x, y);
 		}
 		/* Vypis grid
 		for(i = 0; i < 15; i++){

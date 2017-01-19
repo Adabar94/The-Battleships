@@ -16,6 +16,9 @@ int main( int argc, char *argv[] ) {
    	int gid, pid;
    	
    	int portNo = 6789;
+   	if (argc > 1){
+   		portNo = atoi(argv[1]);
+	}
 
    	serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 

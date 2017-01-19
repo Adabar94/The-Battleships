@@ -148,7 +148,7 @@ void createGame(int gid, int socketPlayerOne, int socketPlayerTwo) {
 	bzero(actualGame.player[1].nick, sizeof(actualGame.player[1].nick));
 	if(pthread_create(&actualGame.player[1].reader, NULL, &readerInit, &actualGame.player[1])) {
 		perror("Error in starting reader thread!\n");
-		pthread_cancel(owner->parentGame->player[0].reader);
+		pthread_cancel(actualGame.player[0].reader);
 		exit(1);
 	}
 	

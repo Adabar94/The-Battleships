@@ -68,9 +68,15 @@ public abstract class Coder {
 
 	public static void recvDefendPosition(String message) {
 		message = message.toUpperCase();
+		if ((int) (message.charAt(1)) < 65 || (int) (message.charAt(1)) > 79 || (int) (message.charAt(2)) < 65
+				|| (int) (message.charAt(2)) > 79) {
+			sendErrorMessage();
+			return;
+		}
 		if (message.charAt(3) == '3') {
 			Info.info("Nepøítel potopil vaši poslední loï. Prohrál jste!");
 			Main.exit();
+			return;
 		}
 		Resources.ally.shoot(message.charAt(1), message.charAt(2));
 		Resources.isOurTurn = true;

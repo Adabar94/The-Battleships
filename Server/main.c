@@ -70,7 +70,9 @@ int main( int argc, char *argv[] ) {
 
       	if (pid == 0) {
         	close(serverSocket);
-        	createGame(gid++, socketPlayerOne, socketPlayerTwo);
-      	}
+        	createGame(gid, socketPlayerOne, socketPlayerTwo);
+      	} else {
+      		gid++;
+		}
    	}
 }

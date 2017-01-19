@@ -12,7 +12,7 @@
 struct game 
 {
 	int ID;
-	int turn; 
+	int turn;
 	struct player player[2];
 };
 

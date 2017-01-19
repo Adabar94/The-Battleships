@@ -6,9 +6,6 @@ void decode(struct player *owner, char message[]) {
 	bzero(buffer, 20);
 	
 	if(message[0] == 'L'){
-		/* Login message
-		printf("login - %s \n", message);
-		*/
 		point = 1;
 		
 		// Nickname
@@ -17,7 +14,8 @@ void decode(struct player *owner, char message[]) {
 		for(i = 0; i < owner->nick_length; i++){
 			owner->nick[i] = message[i+point];
 		}
-		printf("Player %.*s\n joined game.", owner->nick_length, owner->nick);
+		printf("Player %.*s joined game %d \n", owner->nick_length, owner->nick, owner->parentGame->ID);
+		printf("Login message: %s \n", message);
 		point += owner->nick_length;
 		
 		// Grid
@@ -49,14 +47,11 @@ void decode(struct player *owner, char message[]) {
 			}
 
 		}
-		return;
+		return;	
 	}
 	if(message[0] == 'A'){
 		x = ((int) (message[1])-65);
 		y = ((int) (message[2])-65);
-		
-		printf("%d\n", owner->id);
-		printf("%d\n", owner->parentGame->turn);
 		
 		if(owner->id == 0){
 			i = 1;
@@ -68,7 +63,7 @@ void decode(struct player *owner, char message[]) {
 			return;
 		}
 		
-		printf("Player %s is shooting on position %d, %d\n", owner->nick, x, y);
+		printf("Game %d: player %d: %s  is shooting on position %d, %d\n", owner->parentGame->ID, owner->id, owner->nick, x, y);
 		
 		buffer[1] = message[1];
 		buffer[2] = message[2];
@@ -102,7 +97,7 @@ void decode(struct player *owner, char message[]) {
 		
 		buffer[0] = 'A';
 		if(write(owner->parentGame->player[owner->id].socket, buffer, 5) < 0){
-		perror("ERROR writing to socket");
+		
 		}
 		
 		buffer[0] = 'D';
@@ -113,12 +108,21 @@ void decode(struct player *owner, char message[]) {
 		owner->parentGame->turn = i;
 		return;
 	}
-	if(message[0] == 'E'){
-		
+	if(message[0] == 'E') {
+		write(owner->parentGame->player[0].socket, "E\n", 3);
+		close(owner->parentGame->player[0].socket);
+		write(owner->parentGame->player[1].socket, "E\n", 3);
+		close(owner->parentGame->player[1].socket);
+		pthread_cancel(owner->parentGame->player[1 - owner->id].reader);
+		pthread_exit(NULL);
+		return;
 	}
 	
 }
 
+/**
+Creates new game
+*/
 void createGame(int gid, int socketPlayerOne, int socketPlayerTwo) {
    	char buffer[256];
    	bzero(buffer, 256);
@@ -131,6 +135,7 @@ void createGame(int gid, int socketPlayerOne, int socketPlayerTwo) {
 	actualGame.player[0].parentGame = &actualGame;
 	actualGame.player[0].socket = socketPlayerOne;
 	actualGame.player[0].nick_length = 0;
+	bzero(actualGame.player[0].nick, sizeof(actualGame.player[0].nick));
 	if(pthread_create(&actualGame.player[0].reader, NULL, &readerInit, &actualGame.player[0])) {
 		perror("Error in starting reader thread!\n");
 		exit(1);
@@ -140,12 +145,16 @@ void createGame(int gid, int socketPlayerOne, int socketPlayerTwo) {
 	actualGame.player[1].parentGame = &actualGame;
 	actualGame.player[1].socket = socketPlayerTwo;
 	actualGame.player[1].nick_length = 0;
+	bzero(actualGame.player[1].nick, sizeof(actualGame.player[1].nick));
 	if(pthread_create(&actualGame.player[1].reader, NULL, &readerInit, &actualGame.player[1])) {
 		perror("Error in starting reader thread!\n");
+		pthread_cancel(owner->parentGame->player[0].reader);
 		exit(1);
 	}
 	
+	printf("Ending game with id %d\n", gid);
 	pthread_join(actualGame.player[1].reader, NULL);
 	pthread_join(actualGame.player[2].reader, NULL);
+	exit(0);
 }
 

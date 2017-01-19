@@ -25,12 +25,14 @@ public abstract class Coder {
 			recvDefendPosition(order);
 			break;
 		case 'E':
-			if (order.charAt(1) == 'S') {
+			if (order.length() == 1) {
+				Info.info("Opponent opustil hru, zvítìzil jste.");
+			} else if (order.charAt(1) == 'S') {
 				Info.error("Server ukonèil komunikaci, hra je ukonèena.");
 			} else if (order.charAt(1) == 'N') {
 				Info.error("Server není dostupný. Ukonèuji aplikaci.");
 			} else {
-				Info.info("Opponent opustil hru, zvítìzil jste.");
+				Info.error("Komunikace ukonèena z neznámého dùvodu!");
 			}
 			Main.exit();
 			break;
@@ -42,12 +44,19 @@ public abstract class Coder {
 
 	public static void gameIsReady(String message) {
 		Resources.isOurTurn = message.charAt(1) == '0';
-		Info.info("Pøipojeno ke hráèi: "+message.substring(2));
+		Info.info("Pøipojeno ke hráèi: " + message.substring(2));
 		Resources.gameIsReady.release(2);
 	}
 
 	public static void recvAttackResult(String message) {
 		message = message.toUpperCase();
+
+		if ((int) (message.charAt(1)) < 65 || (int) (message.charAt(1)) > 79 || (int) (message.charAt(2)) < 65
+				|| (int) (message.charAt(2)) > 79) {
+			sendErrorMessage();
+			return;
+		}
+
 		if (message.charAt(3) == '3') {
 			Info.info("Zvítìzil jste! Potopil jste poslední nepøátelskou loï!");
 			Main.exit();

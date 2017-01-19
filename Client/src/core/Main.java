@@ -27,12 +27,12 @@ public class Main {
 
 		new LoginPhase();
 		
-		Resources.ally = new AllyGrid();
-		Resources.enemy = new EnemyGrid();
-		
 		connection = new Connection(Config.serverIP, Config.serverPort);
 		Resources.writer = new Writer(connection.getSocket());
 		Resources.reader = new Reader(connection.getSocket());
+		
+		Resources.ally = new AllyGrid();
+		Resources.enemy = new EnemyGrid();
 		
 		new PreparationPhase();
 		

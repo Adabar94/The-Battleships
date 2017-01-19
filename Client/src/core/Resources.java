@@ -29,7 +29,7 @@ public abstract class Resources {
 	public abstract class Constants {
 		public static final String TITLE = "Lodì";
 
-		public static final String IMG_PATH = "images/";
+		public static final String IMG_PATH = "src/images/";
 		public static final String IMG_FORMATE = ".png";
 		public static final String ICON_PATH = IMG_PATH + "icon.png";
 		

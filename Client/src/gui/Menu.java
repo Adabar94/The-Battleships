@@ -18,7 +18,7 @@ import core.Main;
 
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar {
-	
+
 	/**
 	 * Constructor of menu
 	 */
@@ -30,6 +30,7 @@ public class Menu extends JMenuBar {
 
 	/**
 	 * Construct game menu bar item
+	 * 
 	 * @return
 	 */
 	private JMenu game() {
@@ -42,14 +43,21 @@ public class Menu extends JMenuBar {
 		}));
 		return game;
 	}
-	
+
 	/**
 	 * Construct help menu bar item
+	 * 
 	 * @return
 	 */
 	private JMenu help() {
 		JMenu help = new JMenu("Nápovìda");
-		help.add(new Item("Jak hrát", null));
+		help.add(new Item("Jak hrát", new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				howToPlay();
+				
+			}
+		}));
 		help.add(new Item("Pravidla", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -69,16 +77,28 @@ public class Menu extends JMenuBar {
 		return help;
 	}
 
+	private void howToPlay() {
+		String info = "Ve fázi rozdìlení lodí si hráè zvolí buï náhodné rozložení lodí, nebo si oznaèí loï kterou chce umístit a umístí ji na herní pole. \n"
+				+ "Po rozložení všech lodí hráè stiskne tlaèítko pokraèovat a èeká na protihráèe.\n"
+				+ "Ve chvíli, kdy se pøipojí protihráè se hráèi støídají v tazích dle ukazatele tahu (modrý, nebo èervený). \n"
+				+ "Hráè, který potopí jako první všechny protivníkovi lodì vítìzí.";
+		Info.info(info);
+	}
+
 	/**
 	 * Class of menu item
+	 * 
 	 * @author Adam Barák
 	 *
 	 */
 	private class Item extends JMenuItem {
 		/**
 		 * Constructor for Item class
-		 * @param name - name of item
-		 * @param a - action on click
+		 * 
+		 * @param name
+		 *            - name of item
+		 * @param a
+		 *            - action on click
 		 */
 		private Item(String name, ActionListener a) {
 			this.setText(name);

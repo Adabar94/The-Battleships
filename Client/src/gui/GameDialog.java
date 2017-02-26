@@ -17,7 +17,7 @@ import core.Resources.Constants;
  *
  */
 @SuppressWarnings("serial")
-public abstract class GameDialog extends JDialog{
+public class GameDialog extends JDialog{
 	
 	/**
 	 * Default constructor

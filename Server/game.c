@@ -21,13 +21,7 @@ void decode(struct player *owner, char message[]) {
 		// Grid
 		memset(owner->grid, 0, sizeof(owner->grid[0][0]) * 15 * 15);
 		for(i = 1; i < 15; i++){
-			x = (int) (message[point++]) - 65;
-			y = (int) (message[point++]) - 65;
-			if (x < 0 || x >14 ||y < 0 || x > 14){
-				printf("ERROROUS COORDINATES!");
-				decode(owner, "E");
-			}
-			buildShip(owner, i, x, y);
+			buildShip(owner, i, ((int) (message[point++]) - 65), ((int) (message[point++]) - 65));
 		}
 		/* Vypis grid
 		for(i = 0; i < 15; i++){
@@ -158,9 +152,10 @@ void createGame(int gid, int socketPlayerOne, int socketPlayerTwo) {
 		exit(1);
 	}
 	
-	printf("Ending game with id %d\n", gid);
+
+	pthread_join(actualGame.player[0].reader, NULL);
 	pthread_join(actualGame.player[1].reader, NULL);
-	pthread_join(actualGame.player[2].reader, NULL);
+	printf("Ending game with id %d\n", gid);
 	exit(0);
 }
 
